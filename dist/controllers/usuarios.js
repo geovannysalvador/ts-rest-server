@@ -21,9 +21,9 @@ const getusuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getusuarios = getusuarios;
 const getusuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const unUsuario = yield usuario_1.default.findByPk(id);
-    if (unUsuario) {
-        res.json(unUsuario);
+    const usuario = yield usuario_1.default.findByPk(id);
+    if (usuario) {
+        res.json(usuario);
     }
     else {
         res.status(404).json({
@@ -32,13 +32,30 @@ const getusuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getusuario = getusuario;
-const postUsuario = (req, res) => {
+const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    res.json({
-        msg: 'Post Usuario',
-        body
-    });
-};
+    try {
+        const existeEmail = yield usuario_1.default.findOne({
+            where: {
+                email: body.email
+            }
+        });
+        if (existeEmail) {
+            return res.status(400).json({
+                msg: `Ya existe el correo: ${body.email}`
+            });
+        }
+        const usuario = new usuario_1.default(body);
+        yield usuario.save();
+        res.json(usuario);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Contacte a soporte tecnico'
+        });
+    }
+});
 exports.postUsuario = postUsuario;
 const putUsuario = (req, res) => {
     const { id } = req.params;
