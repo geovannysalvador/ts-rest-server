@@ -55,16 +55,30 @@ export const postUsuario = async (req:Request, res:Response) =>{
     }
 }
 
-export const putUsuario = (req:Request, res:Response) =>{
+export const putUsuario = async (req:Request, res:Response) =>{
     
     const {id} = req.params;
     const {body} = req;
 
-    res.json({
-        msg: 'Put Usuario',
-        id,
-        body
-    })
+    try {
+
+        const existeUser = await Usuario.findByPk(id);
+        if (!existeUser) {
+            return res.status(404).json({
+                msg: 'No existe un usuario con el id' + id
+            })
+        }
+
+        await existeUser.update(body);
+
+        res.json(existeUser);
+         
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Contacte a soporte tecnico'
+        })
+    }
 }
 
 export const deleteUsuario = (req:Request, res:Response) =>{

@@ -57,15 +57,26 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.postUsuario = postUsuario;
-const putUsuario = (req, res) => {
+const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
-    res.json({
-        msg: 'Put Usuario',
-        id,
-        body
-    });
-};
+    try {
+        const existeUser = yield usuario_1.default.findByPk(id);
+        if (!existeUser) {
+            return res.status(404).json({
+                msg: 'No existe un usuario con el id' + id
+            });
+        }
+        yield existeUser.update(body);
+        res.json(existeUser);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Contacte a soporte tecnico'
+        });
+    }
+});
 exports.putUsuario = putUsuario;
 const deleteUsuario = (req, res) => {
     const { id } = req.params;
