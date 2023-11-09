@@ -34,11 +34,12 @@ class Server {
     dbconection() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                yield conection_1.default.sync();
                 yield conection_1.default.authenticate();
                 console.log('La DB esta en linea');
             }
             catch (error) {
-                throw new Error(undefined);
+                throw new Error(error);
             }
         });
     }

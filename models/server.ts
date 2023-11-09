@@ -30,12 +30,13 @@ class Server {
 
         try {
 
+            await db.sync();
             await db.authenticate();
             console.log('La DB esta en linea');
             
             
         } catch (error) {
-            throw new Error(undefined);
+            throw new Error(error as string);
         }
     }
 
