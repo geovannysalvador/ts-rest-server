@@ -66,7 +66,7 @@ export const putUsuario = async (req:Request, res:Response) =>{
         if (!existeUser) {
             return res.status(404).json({
                 msg: 'No existe un usuario con el id' + id
-            })
+            });
         }
 
         await existeUser.update(body);
@@ -81,12 +81,22 @@ export const putUsuario = async (req:Request, res:Response) =>{
     }
 }
 
-export const deleteUsuario = (req:Request, res:Response) =>{
+export const deleteUsuario = async (req:Request, res:Response) =>{
     
     const {id} = req.params;
 
-    res.json({
-        msg: 'Delete Usuario',
-        id
-    })
+    const existeUser = await Usuario.findByPk(id);
+        if (!existeUser) {
+            return res.status(404).json({
+                msg: 'No existe un usuario con el id' + id
+            });
+        }
+    
+        // Eliminarlo permanentemente de la bd
+        // await existeUser.destroy();
+
+        // Cambiarle el estado a cero como en la BD se indico
+        await existeUser.update({estado: false});
+
+    res.json(existeUser)
 }

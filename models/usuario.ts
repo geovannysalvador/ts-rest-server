@@ -9,7 +9,7 @@ const Usuario = db.define('Usuario', {
         type: DataTypes.STRING
     },
     estado: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
 });
 
