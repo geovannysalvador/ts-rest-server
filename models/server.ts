@@ -1,9 +1,9 @@
 import express, {Application} from 'express';
-
 // Aca colocamos las rutas de usuario pero UserRoutes puede ser cualquier nombre
 import userRoutes from '../routes/usuario';
-
 import cors from 'cors'
+
+import db from '../db/conection';
 
 
 class Server {
@@ -18,10 +18,25 @@ class Server {
     constructor(){
         this.app = express();
         this.port = process.env.PORT || '8000';
+        // Metodos iniciales
+        this.dbconection();
         this.middlewares();
         // Definir mis rutas
         this.routes();
 
+    }
+
+    async dbconection(){
+
+        try {
+
+            await db.authenticate();
+            console.log('La DB esta en linea');
+            
+            
+        } catch (error) {
+            throw new Error(undefined);
+        }
     }
 
     middlewares(){
