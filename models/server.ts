@@ -2,8 +2,9 @@ import express, {Application} from 'express';
 
 // Aca colocamos las rutas de usuario pero UserRoutes puede ser cualquier nombre
 import userRoutes from '../routes/usuario';
-// Ejemplo si es que tengo mas
-// import productsRoutes from '../routes/usuario'
+
+import cors from 'cors'
+
 
 class Server {
     // definir lo que vamos a usar 
@@ -17,8 +18,19 @@ class Server {
     constructor(){
         this.app = express();
         this.port = process.env.PORT || '8000';
+        this.middlewares();
         // Definir mis rutas
-        this.routes()
+        this.routes();
+
+    }
+
+    middlewares(){
+        // cors
+        this.app.use(cors());
+        // Lectura del body || parsear el body || peticiobnes post...
+        this.app.use(express.json());
+        // Carpeta publica
+        this.app.use(express.static('public'))
     }
 
     routes(){
